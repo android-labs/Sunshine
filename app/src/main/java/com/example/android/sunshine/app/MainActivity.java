@@ -1,17 +1,35 @@
 package com.example.android.sunshine.app;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+        import android.support.v7.app.ActionBarActivity;
+        import android.support.v7.app.ActionBar;
+        import android.support.v4.app.Fragment;
+        import android.os.Bundle;
+        import android.view.LayoutInflater;
+        import android.view.Menu;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.os.Build;
 
 
-public class MainActivity extends Activity {
+        import android.widget.ArrayAdapter;
+        import android.widget.ListView;
+
+        import java.util.Arrays;
+        import java.util.List;
+        import java.util.ArrayList;
+
+public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }
     }
 
 
@@ -35,5 +53,52 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+
+        private ArrayAdapter<String> mForecastAdapter;
+
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+            String[] forecastArray = {
+                    "Today - Sunny - 88/63",
+                    "Tomorrow - Foggy - 70/40",
+                    "Weds - Cloudy - 72/63",
+                    "Thurs - Asteroids - 75/65",
+                    "Fri - Heavy Rain - 65/56",
+                    "Sat - HELP TRAPPED IN WATHERSTATION - 60/51",
+                    "Sun - Sunny - 80/68"
+
+            };
+
+            List<String> weekForecast = new ArrayList<String>(
+                    Arrays.asList(forecastArray)
+            );
+
+            mForecastAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.list_item_forecast,
+                            R.id.list_item_forecast_textview,
+                            weekForecast
+                    );
+
+            ListView ListView = (ListView)rootView.findViewById(R.id.listview_forecast);
+            ListView.setAdapter(mForecastAdapter);
+
+            return rootView;
+        }
     }
 }
